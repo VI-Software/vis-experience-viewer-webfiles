@@ -1,0 +1,3 @@
+# VI Software Experience Viewer Webfiles
+Archivos web para VI Software Experience Viewer
+VI Software Experience Viewer constituye una plataforma web diseñada para posibilitar a los usuarios de determinada experiencia la visualización de un mapa en línea que refleja las dimensiones del servidor, acompañado de información adicional relevante. Esta aplicación se fundamenta en el proyecto [Dynmap-Forge/Fabric](https://vi-software.gitbook.io/vi-software/vi-software-experience-viewer) y se encuentra bajo la administración de la responsable de la experiencia, quien gestiona dicha herramienta a través del panel de control correspondiente.
