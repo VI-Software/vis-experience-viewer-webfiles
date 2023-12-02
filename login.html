@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <title>Acceso a VIS Experience Viewer</title>
+    <link rel="icon" href="images/vis-logo-nl.png" type="image/ico" />
+    <link rel="stylesheet" type="text/css" href="css/leaflet.css?_=3.7-beta-1-834" />
+    <link rel="stylesheet" type="text/css" href="css/standalone.css?_=3.7-beta-1-834" media="screen" />
+    <link rel="stylesheet" type="text/css" href="css/dynmap_style.css?_=3.7-beta-1-834" media="screen" />
+    <script type="text/javascript" src="standalone/config.js?_=3.7-beta-1-834"></script>
+    <script type="text/javascript" src="js/jquery-3.5.1.js?_=3.7-beta-1-834"></script>
+    
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #ddd;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        #logo {
+            display: block;
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        #logo img {
+            width: 150px;
+            height: auto;
+        }
+
+        .dynmaplogin {
+            background-color: #333;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 400px;
+        }
+
+        h2 {
+            color: #ff6565;
+            text-align: center;
+        }
+
+        .statusmessage {
+            color: #ffc107;
+            margin-bottom: 15px;
+        }
+
+        .loginregister {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        button {
+            flex-grow: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        button#loginButton {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        button#registerButton {
+            background-color: #e74c3c;
+            color: #fff;
+        }
+
+        button:hover {
+            filter: brightness(1.2);
+        }
+
+        #loginForm,
+        #registerForm {
+            display: none;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #aaa;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            box-sizing: border-box;
+            border: 1px solid #ff6565;
+            border-radius: 5px;
+            background-color: #333;
+            color: #ddd;
+        }
+
+        input[type="submit"] {
+            background-color: #ff6565;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #e64d4d;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var loginForm = document.getElementById('loginForm');
+            var registerForm = document.getElementById('registerForm');
+            var loginButton = document.getElementById('loginButton');
+            var registerButton = document.getElementById('registerButton');
+
+            loginButton.addEventListener('click', function() {
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+            });
+
+            registerButton.addEventListener('click', function() {
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+            });
+        });
+    </script>
+    	<script type="text/javascript">
+            $(document).ready(function() {
+                var status = $('#status_message');
+                if(window.location.href.indexOf('error=loginfailed') >= 0)
+                    $('<div/>').text('Inicio de sesión fallido ').appendTo(status);
+                if(window.location.href.indexOf('error=verifyfailed') >= 0)
+                    $('<div/>').text('Error al verificar la contraseña ').appendTo(status);
+                if(window.location.href.indexOf('error=registerfailed') >= 0)
+                    $('<div/>').text('Registro fallido (¿código de acceso incorrecto?) ').appendTo(status);
+                $('form')[0].setAttribute('action', config.url.login);
+                $('form')[1].setAttribute('action', config.url.register);
+                document.forms['login'].elements['j_username'].focus();
+            });
+            
+            $(function(){
+                $('form[name=register]').submit(function(){
+                    $.post($(this).attr('action'), $(this).serialize(), function(json) {
+                        if(json.result == 'success')
+                            window.location = 'index.html';
+                        else
+                            window.location = 'login.html?error=' + json.result;
+                    }, 'json');
+                    return false;
+                });
+            });
+    
+            $(function(){
+                $('form[name=login]').submit(function(){
+                    $.post($(this).attr('action'), $(this).serialize(), function(json) {
+                        if(json.result == 'success')
+                            window.location = 'index.html';
+                        else
+                            window.location = 'login.html?error=' + json.result;
+                    }, 'json');
+                    return false;
+                });
+            });
+        </script>
+</head>
+<body>
+    <div id="logo">
+        <img src="images/vis-logo-nobg.png" alt="Logo de tu aplicación">
+    </div>
+
+    <div class='dynmaplogin'>
+        <h2>Acceso a VIS Experience Viewer - Natal não remasterizado</h2>
+        <div id="status_message" class="statusmessage"></div>
+        
+        <div class="loginregister">
+            <button id="loginButton">Iniciar Sesión</button>
+            <button id="registerButton">Registrarse</button>
+        </div>
+
+        <div id="loginForm">
+            <!-- Formulario de inicio de sesión con enlace de ayuda -->
+            <form method="POST" name="login" action="up/login">
+                <label for="j_username">ID de Usuario</label>
+                <input type="text" name="j_username" required>
+
+                <label for="j_password">Contraseña</label>
+                <input type="password" name="j_password" required>
+
+                <input type="submit" name="login" value="Iniciar Sesión">
+            </form>
+            <p style="text-align: center; margin-top: 10px;">
+                <a href="https://vi-software.gitbook.io/vi-software/vi-software-experience-viewer">¿Necesitas ayuda para iniciar sesión?</a>
+            </p>
+        </div>
+
+        <div id="registerForm">
+            <!-- Formulario de registro con enlace de ayuda -->
+            <form method="POST" name="register" action="up/register">
+                <label for="j_username">ID de Usuario</label>
+                <input type="text" name="j_username" required>
+
+                <label for="j_password">Contraseña</label>
+                <input type="password" name="j_password" required>
+
+                <label for="j_verify_password">Verificar Contraseña</label>
+                <input type="password" name="j_verify_password" required>
+
+                <label for="j_passcode">Código de Registro</label>
+                <input type="text" name="j_passcode" required>
+
+                <input type="submit" name="register" value="Registrarse">
+            </form>
+            <p style="text-align: center; margin-top: 10px;">
+                <a href="https://vi-software.gitbook.io/vi-software/vi-software-experience-viewer">¿Necesitas ayuda para registrarte?</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Notificación de copyright -->
+    <div style="text-align: center; margin-top: 20px; color: #888;">
+        <p>&copy; 2023 <a href="https://github.com/VI-Software">VI Software</a> y <a href="https://github.com/orgs/VI-Software/outside-collaborators">contribuidores</a>. Todos los derechos reservados.</p>
+    </div>
+</body>
+</html>
